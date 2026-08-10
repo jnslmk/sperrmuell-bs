@@ -17,6 +17,7 @@ Raw Overpass/Nominatim responses are cached in data/ so re-runs are offline.
 from __future__ import annotations
 
 import json
+import math
 import re
 import time
 import urllib.parse
@@ -32,6 +33,39 @@ OVERPASS_ENDPOINTS = [
 BBOX = (52.12, 10.35, 52.38, 10.75)  # lat/lon box around Braunschweig
 HIGHWAY_RE = r"^(trunk|primary|secondary|tertiary|unclassified|residential|living_street|service|pedestrian|footway|path|track)$"
 UA = "sperrmuell-bs-geodata/0.1"
+
+# Same-name streets in different Stadtteile (Grenzweg, Eichenweg, Rosenweg …) and
+# long arterials split across non-adjacent OSM ways (Celler Heerstraße,
+# Salzdahlumer Straße …) would draw straight connectors if merged into one
+# LineString. Ways are emitted as separate runs wherever two consecutive points
+# are farther apart than this. Keep in sync with SPLIT_GAP_M in map.js.
+SPLIT_GAP_M = 1000.0
+
+
+def hav_m(a: tuple[float, float], b: tuple[float, float]) -> float:
+    """Haversine distance in meters; coords are (lon, lat)."""
+    R = 6_371_000.0
+    lon1, lat1, lon2, lat2 = map(math.radians, (a[0], a[1], b[0], b[1]))
+    dlon, dlat = lon2 - lon1, lat2 - lat1
+    h = (math.sin(dlat / 2) ** 2
+         + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2)
+    return 2 * R * math.asin(math.sqrt(h))
+
+
+def split_runs(line: list[tuple[float, float]]) -> list[list[tuple[float, float]]]:
+    """Split a concatenated way line at gaps > SPLIT_GAP_M; drop runs with < 2 points."""
+    runs: list[list[tuple[float, float]]] = []
+    cur = [line[0]]
+    for a, b in zip(line, line[1:]):
+        if hav_m(a, b) > SPLIT_GAP_M:
+            if len(cur) > 1:
+                runs.append(cur)
+            cur = [b]
+        else:
+            cur.append(b)
+    if len(cur) > 1:
+        runs.append(cur)
+    return runs
 
 
 def http_json(url: str, data: bytes | None = None, timeout: int = 300,
@@ -153,6 +187,12 @@ def main() -> None:
             unmatched.append(street)
             continue
         line = [pt for geom in geoms for pt in geom]
+        runs = split_runs(line) or [line]
+        geometry = (
+            {"type": "LineString", "coordinates": runs[0]}
+            if len(runs) == 1
+            else {"type": "MultiLineString", "coordinates": runs}
+        )
         tours_of = streets.get(street, {})
         props = {
             "name": street,
@@ -162,7 +202,7 @@ def main() -> None:
         features.append({
             "type": "Feature",
             "properties": props,
-            "geometry": {"type": "LineString", "coordinates": line},
+            "geometry": geometry,
         })
 
     fc = {"type": "FeatureCollection", "features": features}

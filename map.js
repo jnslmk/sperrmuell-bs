@@ -23,6 +23,37 @@ const LIVE_WEIGHT = 3.4;
 const STORE_KEY = "sperrmuell-bs:editorial:date";
 const SRC = "data/streets.geojson";
 
+/* Geometry split: streets.geojson concatenates all OSM ways sharing a name into
+   one LineString. Same-name streets in different Stadtteile (Grenzweg, Eichenweg,
+   Rosenweg …) or long arterials (Celler Heerstraße, Salzdahlumer Straße …) then
+   draw straight connectors between fragments. Splitting wherever two consecutive
+   coordinates are farther apart than SPLIT_GAP_M renders each run separately.
+   Threshold in meters — raise it if a real road gets fragmented, lower it if
+   connectors reappear (checked on the live map: 1000 m removes every visible
+   connector while keeping all continuous roads intact). */
+const SPLIT_GAP_M = 1000;
+
+/* Returns a LineString for unsplit geometries, a MultiLineString when the
+   coordinates contain runs separated by gaps > SPLIT_GAP_M. Runs with fewer
+   than 2 points are dropped (isolated OSM points are noise). */
+function splitGeometry(coords) {
+  const runs = [];
+  let cur = [coords[0]];
+  for (let i = 1; i < coords.length; i++) {
+    const a = coords[i - 1];
+    const b = coords[i];
+    if (L.latLng(a[1], a[0]).distanceTo(L.latLng(b[1], b[0])) > SPLIT_GAP_M) {
+      if (cur.length > 1) runs.push(cur);
+      cur = [b];
+    } else {
+      cur.push(b);
+    }
+  }
+  if (cur.length > 1) runs.push(cur);
+  if (runs.length <= 1) return null; // nothing to split
+  return { type: "MultiLineString", coordinates: runs };
+}
+
 const DOW = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 const DOW_LONG = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
 const MONTHS = ["Januar", "Februar", "März", "April", "Mai", "Juni",
@@ -394,6 +425,12 @@ async function load() {
   }
 
   features = (fc && fc.features) || [];
+  for (const f of features) {
+    if (f.geometry && f.geometry.type === "LineString") {
+      const g = splitGeometry(f.geometry.coordinates);
+      if (g) f.geometry = g;
+    }
+  }
   if (!features.length) {
     showError("Die Datei enthält keine Straßen. Vermutlich ist der Datenlauf leer geblieben.");
     return;
