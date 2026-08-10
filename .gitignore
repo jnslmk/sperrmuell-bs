@@ -6,3 +6,9 @@ __pycache__/
 data/bs_ways_raw.json
 data/bs_boundary.json
 data/failures.log
+
+# Open Design agent skill staging (generated per run)
+.od-skills/
+
+# Local preview screenshots (generated)
+variants/.shots/

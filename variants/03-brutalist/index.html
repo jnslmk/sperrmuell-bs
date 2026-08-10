@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sperrmüll Braunschweig · Abholtermine auf der Karte</title>
+<meta name="description" content="Amtliche Karte der Sperrmüll-Abholtermine in Braunschweig: 5 Sammeltouren, Termin wählen, Straße anklicken. Daten: alba-bs.de und OpenStreetMap.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:title" content="Sperrmüll Braunschweig · Abholtermine auf der Karte">
+<meta property="og:description" content="Amtliche Karte der Sperrmüll-Abholtermine in Braunschweig: 5 Sammeltouren, Termin wählen, Straße anklicken.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000000'/%3E%3Ctext x='16' y='25' font-family='Arial Black,Arial' font-size='24' font-weight='900' text-anchor='middle' fill='%23ffef5a'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip" href="#map">Zur Karte springen</a>
+
+<header class="mast" data-od-id="masthead">
+  <div class="mast-brand">
+    <p class="eyebrow">ALBA Braunschweig GmbH &middot; Abfallwirtschaft</p>
+    <h1>
+      <span class="mast-word">Sperrmüll</span>
+      <span class="mast-place">Braunschweig</span>
+    </h1>
+  </div>
+  <div class="mast-stat" id="mast-stat" data-od-id="masthead-tally">
+    <span class="stat-line"><b>&mdash;</b> Termine</span>
+    <span class="stat-line"><b>&mdash;</b> Straßen</span>
+    <span class="stat-line"><b>5</b> Touren</span>
+  </div>
+</header>
+
+<section class="rail" data-od-id="control-rail" aria-label="Steuerung">
+
+  <div class="block" data-od-id="date-filter">
+    <div class="block-head">
+      <h2 id="chips-label">Termin wählen</h2>
+      <span class="tally" id="count" aria-live="polite"></span>
+    </div>
+    <p class="block-note">Ein Termin zeigt genau die Touren, die an diesem Tag fahren.</p>
+    <div class="chips" id="chips" role="group" aria-labelledby="chips-label"></div>
+  </div>
+
+  <div class="block" data-od-id="tour-legend">
+    <div class="block-head">
+      <h2 id="legend-title">Touren</h2>
+    </div>
+    <div class="legend" id="legend" aria-label="Touren-Legende"></div>
+  </div>
+
+  <footer class="meta" data-od-id="data-meta">
+    <p id="meta">Datenstand wird geladen.</p>
+    <p class="meta-src">
+      Quellen:
+      <a href="https://www.alba-bs.de" target="_blank" rel="noopener">alba-bs.de</a> &middot;
+      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>
+    </p>
+  </footer>
+
+</section>
+
+<main class="stage" data-od-id="map-stage">
+  <div id="map" aria-label="Karte der Sperrmüll-Abholtermine"></div>
+
+  <div class="status" id="status" role="status" aria-live="polite" data-od-id="map-status">
+    <div class="status-card">
+      <p class="status-kicker" id="status-kicker">Lädt</p>
+      <p class="status-head" id="status-head">Karte wird geladen</p>
+      <p class="status-body" id="status-body">Straßenzüge und Abholtermine werden gezeichnet.</p>
+      <div class="skeleton" id="status-skeleton" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+      <button class="btn" type="button" id="status-action" hidden>Erneut laden</button>
+    </div>
+  </div>
+
+  <p class="hint" data-od-id="map-hint">Straße anklicken &rarr; Hausnummern und Termine</p>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="map.js"></script>
+</body>
+</html>

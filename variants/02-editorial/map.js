@@ -21,7 +21,7 @@ const FADED_WEIGHT = 1.3;
 const FADED_OPACITY = 0.45;
 const LIVE_WEIGHT = 3.4;
 const STORE_KEY = "sperrmuell-bs:editorial:date";
-const SRC = "data/streets.geojson";
+const SRC = "../../data/streets.geojson";
 
 const DOW = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 const DOW_LONG = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];

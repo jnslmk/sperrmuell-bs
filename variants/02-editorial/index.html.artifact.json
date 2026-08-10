@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "variants/02-editorial/index.html",
+  "entry": "variants/02-editorial/index.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-08-10T22:24:07.904Z",
+  "updatedAt": "2026-08-10T22:24:07.904Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

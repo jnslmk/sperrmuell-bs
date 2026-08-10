@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sperrmüll Braunschweig · Abholtermine auf der Karte</title>
+<meta name="description" content="Karte der Sperrmüll-Abholtermine in Braunschweig. Termin wählen, Sammeltour auf der Karte sehen, Straße anklicken. Daten: alba-bs.de und OpenStreetMap.">
+<meta name="theme-color" content="#08090a">
+<meta property="og:title" content="Sperrmüll Braunschweig · Abholtermine auf der Karte">
+<meta property="og:description" content="Welche Straße wird wann abgeholt? Alle Sammeltouren der ALBA Braunschweig auf einer Karte.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%235e6ad2'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 12h14l-1.4 11H10.4z'/%3E%3Cpath d='M7 9h18'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#map">Zur Karte springen</a>
+
+<div class="app" data-od-id="app-shell">
+
+  <aside class="sidebar" data-od-id="sidebar">
+
+    <header class="brand" data-od-id="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5.5 8.5h13l-1.2 10.2a1.4 1.4 0 0 1-1.4 1.3H8.1a1.4 1.4 0 0 1-1.4-1.3z"/>
+          <path d="M3.5 5.6h17"/>
+          <path d="M9.6 5.6 10.4 3.6h3.2l.8 2"/>
+        </svg>
+      </span>
+      <div class="brand-text">
+        <h1>Sperrmüll <span>Braunschweig</span></h1>
+        <p class="brand-sub">Abholtermine der Sammeltouren</p>
+      </div>
+      <button class="sheet-toggle" id="sheet-toggle" type="button" aria-expanded="true" aria-controls="side-body">
+        <span class="sr-only">Termine und Touren ein- oder ausblenden</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+    </header>
+
+    <div class="side-body" id="side-body">
+
+      <dl class="stats" id="stats" data-od-id="stat-strip">
+        <div class="stat"><dt>Termine</dt><dd id="stat-dates">—</dd></div>
+        <div class="stat"><dt>Straßen</dt><dd id="stat-streets">—</dd></div>
+        <div class="stat"><dt>Touren</dt><dd id="stat-tours">—</dd></div>
+      </dl>
+
+      <section class="block" data-od-id="block-dates" aria-labelledby="dates-title">
+        <div class="block-head">
+          <h2 id="dates-title">Termin wählen</h2>
+          <span class="kbd-hint" aria-hidden="true"><kbd>←</kbd><kbd>→</kbd></span>
+        </div>
+
+        <div class="state" id="state" data-od-id="load-state" role="status">
+          <div class="skeleton-list" aria-hidden="true">
+            <span class="sk sk-row"></span><span class="sk sk-row"></span><span class="sk sk-row"></span>
+            <span class="sk sk-row"></span><span class="sk sk-row"></span>
+          </div>
+          <p class="state-text" id="state-text">Termine werden geladen …</p>
+        </div>
+
+        <div class="chips-wrap">
+          <div class="chips" id="chips" role="group" aria-label="Sperrmüll-Termine"></div>
+        </div>
+      </section>
+
+      <section class="block" data-od-id="block-legend" aria-labelledby="legend-title">
+        <div class="block-head">
+          <h2 id="legend-title">Touren</h2>
+          <span class="block-meta" id="legend-meta"></span>
+        </div>
+        <div class="legend" id="legend"></div>
+      </section>
+
+      <footer class="side-foot" data-od-id="sources">
+        <p id="meta">Termine: <a href="https://alba-bs.de" rel="noreferrer noopener" target="_blank">alba-bs.de</a> · Geometrie: <a href="https://www.openstreetmap.org/copyright" rel="noreferrer noopener" target="_blank">OpenStreetMap</a></p>
+        <p class="side-foot-note">Ohne Gewähr — verbindlich ist die Terminbestätigung der ALBA Braunschweig GmbH.</p>
+      </footer>
+
+    </div>
+  </aside>
+
+  <main class="map-wrap" data-od-id="map-canvas">
+    <div id="map" tabindex="-1" aria-label="Karte der Sperrmüll-Abholtermine in Braunschweig"></div>
+    <div class="statusbar" id="statusbar" data-od-id="status-pill">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="status-label" id="status-label">Karte wird geladen</span>
+      <span class="status-count" id="count" aria-live="polite"></span>
+    </div>
+  </main>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="map.js"></script>
+</body>
+</html>

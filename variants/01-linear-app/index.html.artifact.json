@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "variants/01-linear-app/index.html",
+  "entry": "variants/01-linear-app/index.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-08-10T22:25:51.782Z",
+  "updatedAt": "2026-08-10T22:25:51.782Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}
