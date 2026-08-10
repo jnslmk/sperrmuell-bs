@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sperrmüll Braunschweig · Abholtermine auf der Karte</title>
+<meta name="description" content="Karte der Sperrmüll-Abholtermine in Braunschweig — 5 Sammeltouren, 47 Termine. Daten: alba-bs.de + OpenStreetMap.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="map" aria-label="Karte der Sperrmüll-Abholtermine"></div>
+
+<header class="panel" id="panel">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">S</span>
+    <div class="brand-text">
+      <h1>Sperrmüll <em>Braunschweig</em></h1>
+      <p class="sub">Abholtermine der 5 Sammeltouren &middot; ALBA Braunschweig GmbH</p>
+    </div>
+  </div>
+  <div class="filter">
+    <div class="filter-head">
+      <label class="filter-label" for="chips">Termin w&auml;hlen</label>
+      <span class="filter-count" id="count" aria-live="polite"></span>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Sperrmüll-Termine"></div>
+  </div>
+  <p class="meta" id="meta"></p>
+</header>
+
+<aside class="legend" id="legend" aria-label="Touren-Legende"></aside>
+
+<div class="stamp" id="stamp" aria-hidden="true">BS</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="map.js"></script>
+</body>
+</html>

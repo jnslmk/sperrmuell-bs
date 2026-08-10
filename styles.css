@@ -1,0 +1,343 @@
+/* Sperrmüll Braunschweig — municipal print-shop aesthetic.
+   Paper-cream base, ink typography, each collection tour = one spot color. */
+
+:root {
+  --paper: #f3efe4;
+  --paper-2: #eae4d4;
+  --ink: #1b1811;
+  --ink-soft: #6f695a;
+  --line: rgba(27, 24, 17, 0.22);
+  --line-strong: rgba(27, 24, 17, 0.5);
+  --accent: #d64541;
+  --fade: #d3cdbc;
+  --panel: rgba(247, 243, 233, 0.94);
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+#map {
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+}
+
+/* paper grain over the whole page */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2000;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- header panel ---------- */
+
+.panel {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 1000;
+  width: min(420px, calc(100vw - 36px));
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 14px 40px rgba(27, 24, 17, 0.14);
+  padding: 18px 20px 16px;
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes rise {
+  from { transform: translateY(-14px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.brand {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.brand-mark {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  background: var(--accent);
+  color: var(--paper);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 46px;
+  text-align: center;
+  transform: rotate(-3deg);
+  box-shadow: 3px 3px 0 rgba(27, 24, 17, 0.9);
+}
+
+.brand-text h1 {
+  margin: 2px 0 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 31px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.brand-text h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.sub {
+  margin: 6px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+/* ---------- date filter ---------- */
+
+.filter { margin-top: 16px; }
+
+.filter-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.filter-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.filter-count {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.chips {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+  mask-image: linear-gradient(90deg, #000 92%, transparent);
+}
+
+.chips::-webkit-scrollbar { height: 4px; }
+.chips::-webkit-scrollbar-thumb { background: var(--line-strong); }
+.chips::-webkit-scrollbar-track { background: transparent; }
+
+.chip {
+  flex: none;
+  appearance: none;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 5px 10px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  position: relative;
+}
+
+.chip:hover { border-color: var(--ink); }
+
+.chip[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.chip[aria-pressed="true"].chip-next::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.meta {
+  margin: 6px 0 0;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  border-top: 1px dashed var(--line);
+  padding-top: 10px;
+}
+
+/* ---------- legend ---------- */
+
+.legend {
+  position: absolute;
+  right: 18px;
+  bottom: 42px;
+  z-index: 1000;
+  width: 250px;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 10px 30px rgba(27, 24, 17, 0.12);
+  padding: 12px 14px;
+  font-size: 11px;
+  animation: rise 0.55s 0.12s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.legend-title {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 9px;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  border-bottom: 1px dotted var(--line);
+}
+
+.legend-row:last-child { border-bottom: none; }
+
+.legend-swatch {
+  flex: none;
+  width: 14px;
+  height: 5px;
+  box-shadow: 0 0 0 1px rgba(27, 24, 17, 0.25);
+}
+
+.legend-name {
+  font-weight: 500;
+  flex: none;
+}
+
+.legend-detail {
+  margin-left: auto;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  font-size: 10px;
+}
+
+.legend-row.off { opacity: 0.32; }
+
+/* ---------- stamp decoration ---------- */
+
+.stamp {
+  position: absolute;
+  bottom: 16px;
+  left: 18px;
+  z-index: 900;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 34px;
+  letter-spacing: 0.08em;
+  color: rgba(214, 69, 65, 0.35);
+  border: 3px solid rgba(214, 69, 65, 0.4);
+  border-radius: 8px;
+  padding: 2px 12px;
+  transform: rotate(-6deg);
+  pointer-events: none;
+  animation: rise 0.55s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ---------- leaflet overrides ---------- */
+
+.leaflet-container {
+  font-family: var(--mono);
+  background: var(--paper);
+}
+
+.leaflet-tile { filter: saturate(0.85) sepia(0.12); }
+
+.leaflet-popup-content-wrapper {
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  box-shadow: 0 10px 30px rgba(27, 24, 17, 0.18);
+  color: var(--ink);
+}
+
+.leaflet-popup-content { margin: 12px 14px; font-size: 12px; }
+
+.leaflet-popup-tip {
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+}
+
+.popup-name {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.1;
+  text-transform: uppercase;
+  margin: 0 0 6px;
+}
+
+.popup-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  padding: 2px 0;
+  border-bottom: 1px dotted var(--line);
+}
+
+.popup-row:last-child { border-bottom: none; }
+
+.popup-dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  align-self: center;
+}
+
+.popup-tour { font-weight: 500; white-space: nowrap; }
+
+.popup-dates { color: var(--ink-soft); font-size: 10.5px; }
+
+.leaflet-control-attribution {
+  background: rgba(247, 243, 233, 0.8) !important;
+  color: var(--ink-soft) !important;
+  font-size: 9px !important;
+  font-family: var(--mono) !important;
+}
+
+.leaflet-control-attribution a { color: var(--ink-soft) !important; }
+
+.leaflet-control-zoom a {
+  background: var(--panel) !important;
+  color: var(--ink) !important;
+  border-color: var(--line-strong) !important;
+  font-family: var(--mono) !important;
+}
+
+@media (max-width: 640px) {
+  .panel { top: 10px; left: 10px; width: calc(100vw - 20px); padding: 14px 16px 12px; }
+  .legend { right: 10px; bottom: 46px; width: 210px; }
+  .stamp { display: none; }
+}

@@ -1,0 +1,200 @@
+{
+ "4": [
+  {
+   "date": "2026-08-21",
+   "capacity_left": 7
+  },
+  {
+   "date": "2026-09-03",
+   "capacity_left": 18
+  },
+  {
+   "date": "2026-09-10",
+   "capacity_left": 34
+  },
+  {
+   "date": "2026-09-14",
+   "capacity_left": 27
+  },
+  {
+   "date": "2026-09-23",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-09-28",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-08",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-12",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-21",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-29",
+   "capacity_left": 36
+  }
+ ],
+ "60": [
+  {
+   "date": "2026-09-04",
+   "capacity_left": 32
+  },
+  {
+   "date": "2026-09-11",
+   "capacity_left": 42
+  },
+  {
+   "date": "2026-09-18",
+   "capacity_left": 34
+  },
+  {
+   "date": "2026-09-25",
+   "capacity_left": 43
+  },
+  {
+   "date": "2026-10-02",
+   "capacity_left": 44
+  },
+  {
+   "date": "2026-10-09",
+   "capacity_left": 45
+  },
+  {
+   "date": "2026-10-16",
+   "capacity_left": 45
+  },
+  {
+   "date": "2026-10-23",
+   "capacity_left": 44
+  },
+  {
+   "date": "2026-10-30",
+   "capacity_left": 45
+  }
+ ],
+ "10": [
+  {
+   "date": "2026-09-02",
+   "capacity_left": 28
+  },
+  {
+   "date": "2026-09-07",
+   "capacity_left": 33
+  },
+  {
+   "date": "2026-09-17",
+   "capacity_left": 28
+  },
+  {
+   "date": "2026-09-22",
+   "capacity_left": 35
+  },
+  {
+   "date": "2026-09-30",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-05",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-15",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-20",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-28",
+   "capacity_left": 36
+  }
+ ],
+ "7": [
+  {
+   "date": "2026-08-24",
+   "capacity_left": 2
+  },
+  {
+   "date": "2026-09-01",
+   "capacity_left": 27
+  },
+  {
+   "date": "2026-09-08",
+   "capacity_left": 33
+  },
+  {
+   "date": "2026-09-16",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-09-21",
+   "capacity_left": 28
+  },
+  {
+   "date": "2026-10-01",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-06",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-14",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-19",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-26",
+   "capacity_left": 36
+  }
+ ],
+ "1": [
+  {
+   "date": "2026-08-27",
+   "capacity_left": 9
+  },
+  {
+   "date": "2026-09-09",
+   "capacity_left": 31
+  },
+  {
+   "date": "2026-09-15",
+   "capacity_left": 29
+  },
+  {
+   "date": "2026-09-24",
+   "capacity_left": 34
+  },
+  {
+   "date": "2026-09-29",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-07",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-13",
+   "capacity_left": 36
+  },
+  {
+   "date": "2026-10-22",
+   "capacity_left": 34
+  },
+  {
+   "date": "2026-10-27",
+   "capacity_left": 36
+  }
+ ]
+}
