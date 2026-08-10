@@ -2,7 +2,7 @@
 
 Map of the ALBA Braunschweig bulky-waste (Sperrmüll) collection dates — which of the 5 collection tours picks up on which day, across the whole city.
 
-**Live map:** run `python3 -m http.server` in this directory and open `index.html` (or host the static files anywhere).
+**Live map:** the GitHub Actions workflow (`.github/workflows/ci.yml`) scrapes the dates weekly (and on every push / manual run), merges them into the accumulated calendar, rebuilds `data/streets.geojson`, and deploys to GitHub Pages — the page shows all announced collections from today onward. For local preview, run `python3 -m http.server` in this directory and open `index.html`.
 
 ## How it works
 
@@ -19,9 +19,11 @@ The data is gathered in two steps, neither of which needs a server:
    ./scrape.py all / report
    ```
 
+   `data/streets.json` + `data/street_names.json` are committed (refreshed manually with `./scrape.py all` when ALBA changes the tours); CI only re-fetches the dates.
+
 2. **`build_geodata.py`** — adds geometry: Overpass bbox query (named roads incl. paths/service ways) filtered to ways inside Braunschweig's admin boundary (Nominatim), matched to the scraped street names by a normalized form (~99.6% coverage). Writes `data/streets.geojson`.
 
-Refresh the map's dates by re-running both scripts (e.g. on a weekly cron).
+3. **`merge_dates.py`** (CI) — ALBA only exposes a rolling window of upcoming dates. Each CI run captures that window and merges it into the calendar accumulated from previous runs (`merge_dates.py PREV.json NEW.json OUT.json`), keeping every announced date ≥ today, so dates don't fall off the map when they roll out of the booking window. Past dates are dropped; the newest scrape's capacity wins per date.
 
 ## Data files (`data/`)
 

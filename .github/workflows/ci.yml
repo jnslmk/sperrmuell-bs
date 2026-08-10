@@ -1,0 +1,108 @@
+name: ci
+
+# Pipeline:
+#   scrape: run scrape.py (fresh window of future collection dates) -> artifact "findings"
+#   merge:  take the previous run's "merged" artifact, union it with the fresh
+#           findings (dropping dates < today), rebuild streets.geojson -> deploy site
+#   deploy: publish the site artifact to GitHub Pages
+#
+# Because ALBA only exposes a rolling window of upcoming dates, the union keeps
+# a date from falling off the map when it rolls out of the booking window.
+# Street geometry (data/streets.json, street_names.json) is committed; refresh
+# it manually with `./scrape.py all` and commit when ALBA changes the tours.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 4 * * 1"   # weekly, Monday 04:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read        # gh run download of the previous merged artifact
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch future collection dates from ALBA
+        run: |
+          rm -f data/tours.json   # scrape.py skips tours it already knows
+          python3 scrape.py all
+      - name: Upload fresh findings
+        uses: actions/upload-artifact@v4
+        with:
+          name: findings
+          path: |
+            data/tours.json
+            data/meta.json
+          if-no-files-found: error
+
+  merge:
+    runs-on: ubuntu-latest
+    needs: scrape
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: findings
+          path: findings
+      - name: Download previous merged calendar
+        run: |
+          run_id=$(gh run list --workflow=ci.yml --status=success --limit=1 \
+            --json databaseId --jq '.[0].databaseId')
+          if [ -n "$run_id" ]; then
+            gh run download "$run_id" --name merged --dir prev \
+              || echo "no previous merged artifact (first run?)"
+          fi
+      - name: Merge with previous findings
+        run: |
+          mkdir -p prev
+          [ -f prev/tours.json ] || echo '{}' > prev/tours.json
+          python3 merge_dates.py prev/tours.json findings/tours.json data/tours.json
+          cp findings/meta.json data/meta.json
+      - name: Rebuild site geodata
+        run: python3 build_geodata.py
+      - name: Stage site
+        run: |
+          mkdir -p site/data
+          cp index.html styles.css map.js site/
+          cp data/streets.geojson data/meta.json site/data/
+      - name: Upload merged calendar (seed for next run)
+        uses: actions/upload-artifact@v4
+        with:
+          name: merged
+          path: data/tours.json
+          if-no-files-found: error
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: merge
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
