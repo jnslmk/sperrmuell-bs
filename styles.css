@@ -289,6 +289,30 @@ body::after {
   border: 1px solid var(--line-strong);
 }
 
+.leaflet-tooltip {
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  box-shadow: 0 10px 30px rgba(27, 24, 17, 0.18);
+  color: var(--ink);
+  font-size: 11px;
+  padding: 8px 10px;
+}
+
+.leaflet-tooltip-top:before,
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+  display: none;
+}
+
+.tip-head {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
 .popup-name {
   font-family: var(--display);
   font-weight: 600;

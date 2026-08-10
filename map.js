@@ -28,8 +28,10 @@ let map;
 let layer = null;
 let features = [];
 let selected = null; // ISO date or null (= all tours)
+let hoverTour = null; // tour id under the cursor, or null
 let tourStats = {};  // tour -> {count, next}
 const allDates = [];
+const tourDates = {}; // tour -> sorted ISO dates
 
 const el = (id) => document.getElementById(id);
 
@@ -51,6 +53,12 @@ function picksUpOn(feature, iso) {
 }
 
 function styleFor(feature) {
+  if (hoverTour !== null) {
+    const live = tourOf(feature) === hoverTour;
+    return live
+      ? { color: TOUR_COLORS[hoverTour], weight: LIVE_WEIGHT, opacity: 0.95 }
+      : { color: FADED, weight: FADED_WEIGHT, opacity: 0.85 };
+  }
   const active = !selected || picksUpOn(feature, selected);
   if (!active) {
     return { color: FADED, weight: FADED_WEIGHT, opacity: 0.85 };
@@ -71,6 +79,16 @@ function popupFor(feature) {
     </div>`;
   }).join("");
   return `<p class="popup-name">${p.name}</p>${rows}`;
+}
+
+function tooltipFor(feature) {
+  const tour = tourOf(feature);
+  const dates = (tourDates[tour] || []).map(fmtDate).join(" &middot; ");
+  return `<div class="tip-head">
+      <span class="popup-dot" style="background:${TOUR_COLORS[tour]}"></span>
+      <span class="popup-tour">Tour ${tour}</span>
+    </div>
+    <div class="popup-dates">${dates}</div>`;
 }
 
 function buildChips() {
@@ -101,6 +119,13 @@ function selectDate(iso) {
   layer.setStyle(styleFor);
   renderLegend();
   updateCount();
+}
+
+// Clicking a tour selects its soonest date (dates are disjoint per tour,
+// so the date filter then highlights exactly that tour).
+function selectTour(tour) {
+  const soonest = (tourDates[tour] || [])[0];
+  if (soonest) selectDate(soonest);
 }
 
 function renderLegend() {
@@ -172,10 +197,26 @@ async function load() {
   }
   allDates.sort();
 
+  for (const f of features) {
+    for (const [tour, dates] of Object.entries(f.properties.dates)) {
+      const list = tourDates[tour] || (tourDates[tour] = []);
+      for (const d of dates) if (!list.includes(d)) list.push(d);
+    }
+  }
+  for (const t of Object.keys(tourDates)) tourDates[t].sort();
+
   buildStats();
   layer = L.geoJSON(features, {
     style: styleFor,
-    onEachFeature: (f, lyr) => lyr.bindPopup(popupFor(f)),
+    onEachFeature: (f, lyr) => {
+      lyr.bindPopup(popupFor(f));
+      lyr.bindTooltip(tooltipFor(f), { sticky: true });
+      lyr.on({
+        mouseover: () => { hoverTour = tourOf(f); layer.setStyle(styleFor); },
+        mouseout: () => { hoverTour = null; layer.setStyle(styleFor); },
+        click: () => selectTour(tourOf(f)),
+      });
+    },
   }).addTo(map);
   map.fitBounds(layer.getBounds().pad(0.06));
 
