@@ -1,0 +1,62 @@
+name: pages
+
+# Pipeline:
+#   deploy: download the latest scheduled run's "merged" calendar (or fall back
+#           to the committed data/tours.json), rebuild streets.geojson, publish
+#           the site to GitHub Pages
+#
+# Runs on pushes to main so site changes (map.js, styles.css, index.html) go
+# live without re-scraping ALBA. Scraping happens only in ci.yml (schedule /
+# workflow_dispatch).
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: read        # gh run download of the latest merged artifact
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Use latest merged calendar
+        run: |
+          run_id=$(gh run list --workflow=ci.yml --status=success --limit=1 \
+            --json databaseId --jq '.[0].databaseId')
+          if [ -n "$run_id" ]; then
+            gh run download "$run_id" --name merged --dir prev \
+              && cp prev/tours.json data/tours.json
+          fi
+          # first run before any scheduled scrape: committed data/tours.json stays
+      - name: Rebuild site geodata
+        run: python3 build_geodata.py
+      - name: Stage site
+        run: |
+          mkdir -p site/data
+          cp index.html styles.css map.js site/
+          cp data/streets.geojson data/meta.json site/data/
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

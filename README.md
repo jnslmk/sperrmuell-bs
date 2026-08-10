@@ -2,7 +2,7 @@
 
 Map of the ALBA Braunschweig bulky-waste (Sperrmüll) collection dates — which of the 5 collection tours picks up on which day, across the whole city.
 
-**Live map:** the GitHub Actions workflow (`.github/workflows/ci.yml`) scrapes the dates weekly (and on every push / manual run), merges them into the accumulated calendar, rebuilds `data/streets.geojson`, and deploys to GitHub Pages — the page shows all announced collections from today onward. For local preview, run `python3 -m http.server` in this directory and open `index.html`.
+**Live map:** the GitHub Actions workflow (`.github/workflows/ci.yml`) scrapes the dates weekly (or on manual run), merges them into the accumulated calendar, rebuilds `data/streets.geojson`, and deploys to GitHub Pages — the page shows all announced collections from today onward. Pushes to main deploy the site from the latest merged calendar without re-scraping (`.github/workflows/pages.yml`). For local preview, run `python3 -m http.server` in this directory and open `index.html`.
 
 ## How it works
 

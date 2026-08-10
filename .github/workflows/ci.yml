@@ -10,10 +10,11 @@ name: ci
 # a date from falling off the map when it rolls out of the booking window.
 # Street geometry (data/streets.json, street_names.json) is committed; refresh
 # it manually with `./scrape.py all` and commit when ALBA changes the tours.
+#
+# Scraping only runs on the scheduled (or manual) pipeline — pushes to main
+# deploy the latest merged calendar without scraping, see pages.yml.
 
 on:
-  push:
-    branches: [main]
   schedule:
     - cron: "17 4 * * 1"   # weekly, Monday 04:17 UTC
   workflow_dispatch:
