@@ -1,0 +1,87 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Sperrmüll Braunschweig//Tour-Feeds//DE
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Sperrmüll Braunschweig · Tour 4
+BEGIN:VEVENT
+UID:sperrmuell-bs-tour-4-2026-08-21@jnslmk.github.io
+DTSTAMP:20260811T073722Z
+DTSTART;VALUE=DATE:20260821
+SUMMARY:Sperrmüll-Abholung Tour 4
+DESCRIPTION:Weitere Infos: https://jnslmk.github.io/sperrmuell-bs/
+URL:https://jnslmk.github.io/sperrmuell-bs/
+END:VEVENT
+BEGIN:VEVENT
+UID:sperrmuell-bs-tour-4-2026-09-03@jnslmk.github.io
+DTSTAMP:20260811T073722Z
+DTSTART;VALUE=DATE:20260903
+SUMMARY:Sperrmüll-Abholung Tour 4
+DESCRIPTION:Weitere Infos: https://jnslmk.github.io/sperrmuell-bs/
+URL:https://jnslmk.github.io/sperrmuell-bs/
+END:VEVENT
+BEGIN:VEVENT
+UID:sperrmuell-bs-tour-4-2026-09-10@jnslmk.github.io
+DTSTAMP:20260811T073722Z
+DTSTART;VALUE=DATE:20260910
+SUMMARY:Sperrmüll-Abholung Tour 4
+DESCRIPTION:Weitere Infos: https://jnslmk.github.io/sperrmuell-bs/
+URL:https://jnslmk.github.io/sperrmuell-bs/
+END:VEVENT
+BEGIN:VEVENT
+UID:sperrmuell-bs-tour-4-2026-09-14@jnslmk.github.io
+DTSTAMP:20260811T073722Z
+DTSTART;VALUE=DATE:20260914
+SUMMARY:Sperrmüll-Abholung Tour 4
+DESCRIPTION:Weitere Infos: https://jnslmk.github.io/sperrmuell-bs/
+URL:https://jnslmk.github.io/sperrmuell-bs/
+END:VEVENT
+BEGIN:VEVENT
+UID:sperrmuell-bs-tour-4-2026-09-23@jnslmk.github.io
+DTSTAMP:20260811T073722Z
+DTSTART;VALUE=DATE:20260923
+SUMMARY:Sperrmüll-Abholung Tour 4
+DESCRIPTION:Weitere Infos: https://jnslmk.github.io/sperrmuell-bs/
+URL:https://jnslmk.github.io/sperrmuell-bs/
+END:VEVENT
+BEGIN:VEVENT
+UID:sperrmuell-bs-tour-4-2026-09-28@jnslmk.github.io
+DTSTAMP:20260811T073722Z
+DTSTART;VALUE=DATE:20260928
+SUMMARY:Sperrmüll-Abholung Tour 4
+DESCRIPTION:Weitere Infos: https://jnslmk.github.io/sperrmuell-bs/
+URL:https://jnslmk.github.io/sperrmuell-bs/
+END:VEVENT
+BEGIN:VEVENT
+UID:sperrmuell-bs-tour-4-2026-10-08@jnslmk.github.io
+DTSTAMP:20260811T073722Z
+DTSTART;VALUE=DATE:20261008
+SUMMARY:Sperrmüll-Abholung Tour 4
+DESCRIPTION:Weitere Infos: https://jnslmk.github.io/sperrmuell-bs/
+URL:https://jnslmk.github.io/sperrmuell-bs/
+END:VEVENT
+BEGIN:VEVENT
+UID:sperrmuell-bs-tour-4-2026-10-12@jnslmk.github.io
+DTSTAMP:20260811T073722Z
+DTSTART;VALUE=DATE:20261012
+SUMMARY:Sperrmüll-Abholung Tour 4
+DESCRIPTION:Weitere Infos: https://jnslmk.github.io/sperrmuell-bs/
+URL:https://jnslmk.github.io/sperrmuell-bs/
+END:VEVENT
+BEGIN:VEVENT
+UID:sperrmuell-bs-tour-4-2026-10-21@jnslmk.github.io
+DTSTAMP:20260811T073722Z
+DTSTART;VALUE=DATE:20261021
+SUMMARY:Sperrmüll-Abholung Tour 4
+DESCRIPTION:Weitere Infos: https://jnslmk.github.io/sperrmuell-bs/
+URL:https://jnslmk.github.io/sperrmuell-bs/
+END:VEVENT
+BEGIN:VEVENT
+UID:sperrmuell-bs-tour-4-2026-10-29@jnslmk.github.io
+DTSTAMP:20260811T073722Z
+DTSTART;VALUE=DATE:20261029
+SUMMARY:Sperrmüll-Abholung Tour 4
+DESCRIPTION:Weitere Infos: https://jnslmk.github.io/sperrmuell-bs/
+URL:https://jnslmk.github.io/sperrmuell-bs/
+END:VEVENT
+END:VCALENDAR

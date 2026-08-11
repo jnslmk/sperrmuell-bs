@@ -81,11 +81,14 @@ jobs:
           cp findings/meta.json data/meta.json
       - name: Rebuild site geodata
         run: python3 build_geodata.py
+      - name: Build iCal feeds
+        run: python3 build_ics.py
       - name: Stage site
         run: |
           mkdir -p site/data
           cp index.html styles.css map.js site/
           cp data/streets.geojson data/meta.json site/data/
+          cp data/tour-*.ics site/data/
       - name: Upload merged calendar (seed for next run)
         uses: actions/upload-artifact@v4
         with:

@@ -48,11 +48,14 @@ jobs:
           # first run before any scheduled scrape: committed data/tours.json stays
       - name: Rebuild site geodata
         run: python3 build_geodata.py
+      - name: Build iCal feeds
+        run: python3 build_ics.py
       - name: Stage site
         run: |
           mkdir -p site/data
           cp index.html styles.css map.js site/
           cp data/streets.geojson data/meta.json site/data/
+          cp data/tour-*.ics site/data/
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:

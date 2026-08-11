@@ -77,6 +77,11 @@ const el = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) =>
   ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+/* Abonnier-Link je Tour: webcal://…/data/tour-<id>.ics — abgeleitet aus der
+   aktuellen URL, funktioniert lokal und auf GitHub Pages. */
+const calUrl = (tour) =>
+  new URL(`data/tour-${tour}.ics`, location.href).href.replace(/^https?:/, "webcal:");
+
 /* ---------- Datum ---------- */
 
 const asDate = (iso) => {
@@ -300,10 +305,11 @@ function renderLegend() {
 
   for (const [tour, st] of Object.entries(tourStats).sort((a, b) => Number(a[0]) - Number(b[0]))) {
     const on = !selected || tour in active;
-    const row = document.createElement("button");
-    row.type = "button";
+    const row = document.createElement("div");
     row.className = "tour-row";
     row.dataset.tour = tour;
+    row.setAttribute("role", "button");
+    row.setAttribute("tabindex", "0");
     row.setAttribute("aria-pressed", String(on));
     row.title = `Tour ${tour} auf der Karte hervorheben`;
     row.innerHTML = `
@@ -314,8 +320,20 @@ function renderLegend() {
           <span class="tour-state">${selected ? (on ? "holt ab" : "keine Abholung") : `${(tourDates[tour] || []).length} Termine`}</span>
         </span>
         <span class="tour-meta">${num(st.count)} Straßen · nächster ${st.next ? fmtDate(st.next) : "—"}</span>
-      </span>`;
-    row.addEventListener("click", () => selectTour(tour));
+      </span>
+      <a class="tour-cal" href="${calUrl(tour)}"
+         aria-label="Tour ${esc(tour)} als Kalender abonnieren"
+         title="Tour ${esc(tour)} als Kalender abonnieren">Kalender</a>`;
+    row.addEventListener("click", (e) => {
+      if (e.target.closest("a")) return; // Kalender-Link: nicht die Tour wählen
+      selectTour(tour);
+    });
+    row.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        selectTour(tour);
+      }
+    });
     row.addEventListener("mouseenter", () => setHover(tour));
     row.addEventListener("mouseleave", () => setHover(null));
     row.addEventListener("focus", () => setHover(tour));

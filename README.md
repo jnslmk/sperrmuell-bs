@@ -25,6 +25,8 @@ The data is gathered in two steps, neither of which needs a server:
 
 3. **`merge_dates.py`** (CI) — ALBA only exposes a rolling window of upcoming dates. Each CI run captures that window and merges it into the calendar accumulated from previous runs (`merge_dates.py PREV.json NEW.json OUT.json`), keeping every announced date ≥ today, so dates don't fall off the map when they roll out of the booking window. Past dates are dropped; the newest scrape's capacity wins per date.
 
+4. **`build_ics.py`** (CI) — writes one iCalendar feed per tour (`data/tour-<id>.ics`) from `tours.json`: an all-day event per announced date, deterministic UIDs (tour + date) so weekly re-scrapes update subscribed calendars instead of duplicating events. Each legend row links to its tour's feed as a `webcal://` subscription.
+
 ## Data files (`data/`)
 
 | file | content |
@@ -32,6 +34,7 @@ The data is gathered in two steps, neither of which needs a server:
 | `streets.geojson` | the site's data — street geometry + tours + dates per tour |
 | `streets.json` | scraped street → `{tour: [house numbers]}` |
 | `tours.json` | scraped tour → `[{date, capacity_left}]` |
+| `tour-<id>.ics` | per-tour calendar feed (built by `build_ics.py`) |
 | `street_names.json` | flat list of all streets |
 | `streets_raw.json` | enumeration cache (prefix → streets) |
 
