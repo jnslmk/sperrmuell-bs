@@ -25,7 +25,7 @@ The data is gathered in two steps, neither of which needs a server:
 
 3. **`merge_dates.py`** (CI) — ALBA only exposes a rolling window of upcoming dates. Each CI run captures that window and merges it into the calendar accumulated from previous runs (`merge_dates.py PREV.json NEW.json OUT.json`), keeping every announced date ≥ today, so dates don't fall off the map when they roll out of the booking window. Past dates are dropped; the newest scrape's capacity wins per date.
 
-4. **`build_ics.py`** (CI) — writes one iCalendar feed per tour (`data/tour-<id>.ics`) from `tours.json`: an all-day event per announced date, deterministic UIDs (tour + date) so weekly re-scrapes update subscribed calendars instead of duplicating events. Each legend row links to its tour's feed as a `webcal://` subscription.
+4. **`build_ics.py`** (CI) — writes one iCalendar feed per tour (`data/tour-<id>.ics`) from `tours.json`: an all-day event per announced date, deterministic UIDs (tour + date) so weekly re-scrapes update subscribed calendars instead of duplicating events. Each legend row offers two calendar actions per tour: a `webcal://` subscription feed (iOS/macOS, Google Kalender) and a plain `.ics` download to import into any calendar app (works on Android, where no calendar app registers `webcal://`).
 
 ## Data files (`data/`)
 

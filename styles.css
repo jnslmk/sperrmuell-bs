@@ -443,16 +443,24 @@ body::after {
 }
 
 .tour-cal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.04em;
+}
+
+.tour-cal a {
   color: var(--fg-2);
   text-decoration: underline;
   text-underline-offset: 2px;
   white-space: nowrap;
+  line-height: 1.2;
 }
 
-.tour-cal:hover { color: var(--fg); }
+.tour-cal a:hover { color: var(--fg); }
 
 .tour-no {
   font-family: var(--font-display);

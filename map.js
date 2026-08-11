@@ -77,10 +77,12 @@ const el = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) =>
   ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-/* Abonnier-Link je Tour: webcal://…/data/tour-<id>.ics — abgeleitet aus der
-   aktuellen URL, funktioniert lokal und auf GitHub Pages. */
+/* Kalender-Links je Tour, abgeleitet aus der aktuellen URL (lokal wie auf
+   GitHub Pages): calUrl = webcal://-Abo (iOS/macOS, Google Kalender),
+   icsUrl = .ics-Download (importiert in jeder Kalender-App, auch Android). */
 const calUrl = (tour) =>
   new URL(`data/tour-${tour}.ics`, location.href).href.replace(/^https?:/, "webcal:");
+const icsUrl = (tour) => new URL(`data/tour-${tour}.ics`, location.href).href;
 
 /* ---------- Datum ---------- */
 
@@ -321,9 +323,14 @@ function renderLegend() {
         </span>
         <span class="tour-meta">${num(st.count)} Straßen · nächster ${st.next ? fmtDate(st.next) : "—"}</span>
       </span>
-      <a class="tour-cal" href="${calUrl(tour)}"
-         aria-label="Tour ${esc(tour)} als Kalender abonnieren"
-         title="Tour ${esc(tour)} als Kalender abonnieren">Kalender</a>`;
+      <span class="tour-cal">
+        <a href="${calUrl(tour)}"
+           aria-label="Tour ${esc(tour)} als Kalender abonnieren"
+           title="Tour ${esc(tour)} als Kalender-Feed abonnieren — für iOS/macOS und Google Kalender">Abonnieren</a>
+        <a href="${icsUrl(tour)}" download
+           aria-label="Tour ${esc(tour)} als .ics-Datei laden"
+           title="Tour ${esc(tour)} als .ics-Datei laden und in der Kalender-App importieren — empfohlen auf Android">.ics laden</a>
+      </span>`;
     row.addEventListener("click", (e) => {
       if (e.target.closest("a")) return; // Kalender-Link: nicht die Tour wählen
       selectTour(tour);
